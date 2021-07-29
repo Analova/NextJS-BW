@@ -241,6 +241,19 @@ const responsive = {
 
 export default function Package() {
   const { monthly, annual } = packages;
+  const [state, setState] = useState({
+    action: "monthly",
+    pricingPlan: monthly
+  })
+
+  const HandlePricingPlan = (plan) => {
+    if (plan === "annual") {
+      setState({ active: "annual", pricingPlan: annual })
+    } else {
+      setState({ active: "monthly", pricingPlan: monthly })
+
+    }
+  }
 
   const sliderParams = {
     additionalTransfrom: 0,
@@ -266,28 +279,61 @@ export default function Package() {
   };
 
   return (
-    <h1>Package</h1>
+    <section>
+      <SectionHeader
+        slogon="Pricing plan"
+        title="Choose your pricing plan" />
+      <Flex sx={styles.bttonGroup}>
+        <Box sx={styles.buttonGroupInner}>
+          <button
+            className={state.active === "monthly" ? "active" : ""}
+            type="button"
+            arial-lable="Monthly"
+            onClick={() => HandlePricingPlan("montly")}>
+            Monthly Plan
+          </button>
+          <button
+            className={state.active === "annual" ? "active" : ""}
+            type="button"
+            arial-lable="Annual"
+            onClick={() => HandlePricingPlan("annual")}>
+            Anual Plan
+          </button>
+        </Box>
+      </Flex>
+      <Box sx={styles.pricingWrapper} className="pricing__wrapper">
+        <Carousel {...sliderParams}>
+          {state.pricingPlan.map((packageData) => (
+            <Box sx={styles.pricingItem} key={packageData.id}>
+              <PriceCard data={packageData} />
+
+            </Box>
+          ))}
+
+        </Carousel>
+      </Box>
+    </section>
   );
 }
 
 const fadeIn = keyframes`
-  from {
-    opacity: 0;
+      from {
+        opacity: 0;
   }
-  to {
-    opacity: 1;
+      to {
+        opacity: 1;
   }
-`;
+      `;
 const fadeIn2 = keyframes`
-  from {
-    transform: translateY(50%);
-    opacity: 0;
+      from {
+        transform: translateY(50%);
+      opacity: 0;
   }
-  to {
-		transform: translateY(0);
-    opacity: 1;
+      to {
+        transform: translateY(0);
+      opacity: 1;
   }
-`;
+      `;
 const styles = {
   pricingWrapper: {
     mb: '-40px',
